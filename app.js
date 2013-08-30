@@ -4,7 +4,7 @@ var express = require('express')
   , MongoClient = require('mongodb').MongoClient // Driver for connecting to MongoDB
   , routes = require('./routes'); // Routes for our application
 
-MongoClient.connect('mongodb://localhost:27017/blog', function(err, db) {
+MongoClient.connect('mongodb://localhost:27017/app17829332', function(err, db) {
     "use strict";
     if(err) throw err;
 
