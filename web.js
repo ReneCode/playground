@@ -11,13 +11,17 @@ var mongoUri = process.env.MONGOLAB_URI ||
   process.env.MONGOHQ_URL || 
   'mongodb://localhost/mydb'; 
 
-console.log("URI:" + mongoUri);
 
-MongoClient.connect(mongoUri, function(err, db) {
-    "use strict";
-    if(err) throw err;
-
-	app.get('/', function(request, response) {
+app.get('/', function(request, response) {
+	console.log("URI:" + mongoUri);
+	response.send('hello Mongo:' + mongoUri);
+		
+	MongoClient.connect(mongoUri, function(err, db) {
+	    "use strict";
+	    if(err) {
+			response.send("error on mongo connect");
+			throw err;
+		}
 
 		response.send('Hello World - That is my first Web-Site!');
 
