@@ -2,7 +2,7 @@ var express = require("express");
 var app = express();
 app.use(express.logger());
 
-var mongodb = require('mongodb');
+var MongoClient = require('mongodb').MongoClient;
 
 //MongoClient = mongodb.MongoClient;
 
@@ -20,7 +20,7 @@ app.get('/', function(request, response) {
 	
 	
 	console.log("URI:" + mongoUri);
-	console.dir(mongodb);
+	console.dir(MongoClient);
 /*
 
 	MongoClient.connect(mongoUri, function(err, db) {
