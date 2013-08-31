@@ -7,6 +7,13 @@ function ContentHandler (db) {
 
     var posts = new PostsDAO(db);
 
+
+	this.displayTest = function(req, res, next) {
+		res.send("<h3> DAS ist ein test</h3>");
+	}
+
+
+
     this.displayMainPage = function(req, res, next) {
         "use strict";
 

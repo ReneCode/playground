@@ -11,7 +11,8 @@ module.exports = exports = function(app, db) {
     app.use(sessionHandler.isLoggedInMiddleware);
 
     // The main page of the blog
-    app.get('/', contentHandler.displayMainPage);
+    app.get('/', contentHandler.displayTest);
+//    app.get('/', contentHandler.displayMainPage);
 
     // The main page of the blog, filtered by tag
     app.get('/tag/:tag', contentHandler.displayMainPageByTag);
