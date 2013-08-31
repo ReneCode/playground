@@ -2,8 +2,11 @@ var express = require("express");
 var app = express();
 app.use(express.logger());
 
+var mongodb = require('mongodb');
 
-//MongoClient = require('mongodb').MongoClient ;
+//MongoClient = mongodb.MongoClient;
+
+
 MONGOHQ_URL = 'mongodb://heroku:adf0fd4c52b89f381353631748c7074a@paulo.mongohq.com:10000/app17829332';
 local = "mongodb://localhost:27017/app17829332";
 
@@ -17,12 +20,9 @@ app.get('/', function(request, response) {
 	
 	
 	console.log("URI:" + mongoUri);
-	console.dir(request);
-	response.send('hello Mongo:' + mongoUri);
-	/*
-	
+	console.dir(mongodb);
+/*
 
-	
 	MongoClient.connect(mongoUri, function(err, db) {
 	    "use strict";
 	    if(err) {
@@ -31,7 +31,6 @@ app.get('/', function(request, response) {
 		}
 
 		response.send('Hello World - That is my first Web-Site!');
-
 
 	});
 */
