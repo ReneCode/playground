@@ -15,15 +15,23 @@ MongoClient.connect(mongoUri, function(err, db) {
 		throw err;
 	}
 
+
+	var people = db.collection('people');
+
 	app.get('/', function(request, response) {
 		response.send('<h3>Hello World' + request + ' :</h3> ' + mongoUri);
 		
+		people.insert({name:'test-name'}, function(err, inserted) {
+			console.log ("inserted");
+		});
+	});
+
+
+	app.get('/a', function(request, response) {
+
+		var doc = "hallo";
+		response.send('a: ' + doc);
 		
-		console.log("URI:" + mongoUri);
-		console.dir(MongoClient);
-	/*
-	
-	*/
 	});
 
 
