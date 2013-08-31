@@ -2,8 +2,9 @@
   "name": "mongolabtest",
   "version": "1.0.0",
   "description": "Sample app using Heroku, Node.js, and MongoLab",
+  "main": "web.js",
   "dependencies": {
-    "connect": "1.8.x",
-    "mongodb": "0.9.x"
+	"express": ">=3.x",
+	"mongodb": "~1.3.9"
   }
 }
