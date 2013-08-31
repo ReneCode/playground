@@ -12,7 +12,7 @@ var mongoUri = process.env.MONGOLAB_URI ||
 
 MongoClient.connect(mongoUri, function(err, db) {
     "use strict";
-    if(err) throw err;
+//    if(err) throw err;
 
     // Register our templating engine
     app.engine('html', cons.swig);
@@ -28,6 +28,12 @@ MongoClient.connect(mongoUri, function(err, db) {
     // Application routes
     routes(app, db);
 
-    app.listen(3000);
-    console.log('Express server listening on port 3000');
+//    app.listen(3000);
+//    console.log('Express server listening on port 3000');
+});
+
+
+var port = process.env.PORT || 5000;
+app.listen(port, function() {
+  console.log("Listening on " + port);
 });
