@@ -1,7 +1,7 @@
 {
-  "name": "mongolabtest",
+  "name": "blog",
   "version": "1.0.0",
-  "description": "Sample app using Heroku, Node.js, and MongoLab",
+  "description": "Sample App using mongodb",
   "main": "web.js",
   "dependencies": {
 	"bcrypt-nodejs": "~0.0.3",

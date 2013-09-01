@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{{title}}</title>
+
+    <script type="text/javascript" language="Javascript" 
+	        src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js">
+	</script>	
+
+	<script language="javascript" type="text/javascript">
+ 
+    $( document ).ready(function() {
+		$('status').text('ready');
+        $( "#x" ).click(function( event ) {
+            alert( "hi X" );
+        });
+        $( '#btnTest').click(function( event ) {
+			var name = "rene";
+			$('status').text('sending ...');
+            $.get("/x",  function (data,status,xhr) {
+                // write the text coming fromt he server into 
+				$("#status").text(status);
+                $("#serverText").text(data);
+            });
+
+
+        });
+    });
+ 
+    </script>
+
+</head>
+<body>
+
+<h3>Rene Server TEST</h3>
+
+	<Button id="btnTest">Call Server</Button>
+
+    <div id="status" style="color:blue;margin-top:20px">Reply from the Server:</div>
+
+	Server:<div id="serverText"></div>
+
+</body>
+</html>
+
+

@@ -1,4 +1,5 @@
 var express = require("express");
+var cons = require('consolidate');
 var app = express();
 app.use(express.logger());
 
@@ -15,14 +16,38 @@ MongoClient.connect(mongoUri, function(err, db) {
 		throw err;
 	}
 
-
 	var people = db.collection('people');
 
-	app.get('/', function(request, response) {
-		response.send('<h3>Hello World' + request + ' :</h3> ' + mongoUri);
-		
-		people.insert({name:'test-name'}, function(err, inserted) {
+	app.engine('html', cons.swig);
+	app.set('view engine', 'html');
+	app.set('views', __dirname + '/views');
+
+    // Express middleware to populate 'req.cookies' so we can access cookies
+//    app.use(express.cookieParser());
+
+    // Express middleware to populate 'req.body' so we can access POST variables
+//    app.use(express.bodyParser());
+
+
+
+	app.get('/', function(req, res, next) {
+		"use scrict";
+//		res.send('HALLLO WEB');
+		return res.render('main', {title:'Main-Title'});
+	});
+
+
+	app.get('/x', function(request, response) {
+		people.insert({name:'test-name', date:new Date() }, function(err, inserted) {
 			console.log ("inserted");
+
+			var id = "";
+			if (inserted) {
+				id = inserted[0]['_id'];
+			}
+			console.log("id:" + JSON.stringify(inserted));			
+			response.send('inserted:' + id);
+
 		});
 	});
 
@@ -30,7 +55,7 @@ MongoClient.connect(mongoUri, function(err, db) {
 	app.get('/a', function(request, response) {
 
 		var doc = "hallo";
-		response.send('a: ' + doc);
+		response.send('server sendet: ' + doc);
 		
 	});
 
