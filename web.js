@@ -26,24 +26,27 @@ MongoClient.connect(mongoUri, function(err, db) {
 //    app.use(express.cookieParser());
 
     // Express middleware to populate 'req.body' so we can access POST variables
-//    app.use(express.bodyParser());
+    app.use(express.bodyParser());
 
 
 
 	app.get('/', function(req, res, next) {
 		"use scrict";
 //		res.send('HALLLO WEB');
-		return res.render('main', {title:'Main-Title'});
+		return res.render('main', {title:'Main-Title', defaultname:'abc',defaulturl:'http://www.focus.de'});
 	});
 
 
-	app.get('/x', function(request, response) {
-		people.insert({name:'test-name', date:new Date() }, function(err, inserted) {
+	app.post('/save', function(request, response) {
+
+		var url = request.body.url;
+		var name = request.body.name;
+		people.insert({name:name, url:url, date:new Date() }, function(err, inserted) {
 			console.log ("inserted");
 
 			var id = "";
 			if (inserted) {
-				id = inserted[0]['_id'];
+				id = inserted[0]['name'];
 			}
 			console.log("id:" + JSON.stringify(inserted));			
 			response.send('inserted:' + id);
@@ -52,12 +55,24 @@ MongoClient.connect(mongoUri, function(err, db) {
 	});
 
 
-	app.get('/a', function(request, response) {
+	app.post('/:key', function(request, response, next) {
+//		console.log(request);
+		var name = request.params.key;
+		console.log("name:" + name);
+		people.insert({name:name, date:new Date() }, function(err, inserted) {
+			console.log ("inserted");
 
-		var doc = "hallo";
-		response.send('server sendet: ' + doc);
-		
+			var id = "";
+			if (inserted) {
+				id = inserted[0]['name'];
+			}
+			console.log("id:" + JSON.stringify(inserted));			
+			response.send('inserted:' + id);
+
+		});
 	});
+
+
 
 
 });

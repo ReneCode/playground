@@ -11,13 +11,11 @@
  
     $( document ).ready(function() {
 		$('status').text('ready');
-        $( "#x" ).click(function( event ) {
-            alert( "hi X" );
-        });
+
         $( '#btnTest').click(function( event ) {
 			var name = "rene";
 			$('status').text('sending ...');
-            $.get("/x",  function (data,status,xhr) {
+            $.get("/x", "name=" + name, function (data,status,xhr) {
                 // write the text coming fromt he server into 
 				$("#status").text(status);
                 $("#serverText").text(data);
@@ -34,7 +32,12 @@
 
 <h3>Rene Server TEST</h3>
 
-	<Button id="btnTest">Call Server</Button>
+    <form name="f" action="/save" method="post">
+        Name:<input name="name" type="text" id="urlname" value="{{defaultname}}"><br>
+        URL:<input name="url" type="text" id="url" value="{{defaulturl}}">
+        <input type="submit">
+    </form>
+	<Button id="btnTest">Save to server</Button>
 
     <div id="status" style="color:blue;margin-top:20px">Reply from the Server:</div>
 
