@@ -26,7 +26,7 @@ MongoClient.connect(mongoUri, function(err, db) {
 //    app.use(express.cookieParser());
 
     // Express middleware to populate 'req.body' so we can access POST variables
-    app.use(express.bodyParser());
+ //   app.use(express.bodyParser());
 
 
 
