@@ -2,6 +2,7 @@ var express = require("express");
 var cons = require('consolidate');
 var app = express();
 app.use(express.logger());
+app.use(express.bodyParser());
 
 var MongoClient = require('mongodb').MongoClient;
 
@@ -26,8 +27,7 @@ MongoClient.connect(mongoUri, function(err, db) {
 //    app.use(express.cookieParser());
 
     // Express middleware to populate 'req.body' so we can access POST variables
- //   app.use(express.bodyParser());
-
+ 
 
 
 	app.get('/', function(req, res, next) {
