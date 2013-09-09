@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CAD-1</title>
+
+
+<script type="text/javascript" language="Javascript" 
+	        src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js">
+	</script>	
+
+	<script language="javascript" type="text/javascript">
+ 
+    $( document ).ready(function() {
+		$('head').text('ready');
+
+
+		$( '#btnTest').click(function( event ) {
+			var name = "rene";
+			$('status').text('sending ...');
+
+
+        });
+     
+    });
+ 
+    </script>
+
+
+</head>
+<body>
+<script>
+
+
+var bFirst = true;
+var oldPos;
+
+//var canvas=document.getElementById("myCanvas");
+
+function setCanvas(c) {
+	canvas = c;
+}
+
+function setOldPos(p) {
+	oldPos = p;
+}
+
+function saveLine(p1, p2) {
+	$.post('/action', { action:'addLine', p1:p1, p2:p2}, function(data) {
+		$("#server").text(data);
+	});
+}
+
+function reloadCanvas() {
+	$.get('/reload',  function(docs) {
+		var cnt = 0;
+		$.each(docs, function(index, doc) {
+			drawLine(doc.p1, doc.p2);
+			cnt = index;
+		});
+		$("#server").text(cnt + ' reloaded');
+	});
+
+}
+
+function windowToCanvas(x, y) {
+   var bbox = canvas.getBoundingClientRect();
+   return { x: x - bbox.left * (canvas.width  / bbox.width),
+            y: y - bbox.top  * (canvas.height / bbox.height) };
+}
+
+function drawLine(p1, p2) {
+	var ctx = canvas.getContext("2d");
+	ctx.moveTo(p1.x, p1.y);
+	ctx.lineTo(p2.x, p2.y);
+	ctx.stroke();
+}
+
+function cnvs_mousemove(e) {
+	var pos = windowToCanvas(e.clientX, e.clientY);
+	$("#status").text("Pos:" + pos.x + " / " + pos.y);
+}
+
+function cnvs_click(e) {
+	var pos = windowToCanvas(e.clientX, e.clientY);
+	if (bFirst) {
+		setOldPos(pos);
+	}
+	else {
+		drawLine(oldPos, pos);
+		saveLine(oldPos, pos);
+	} 
+	bFirst = !bFirst;
+}
+
+</script>
+<h1>CAD1</h1>
+
+<div id="head">-tmp-</div>
+
+
+
+<canvas id="myCanvas" width="300" height="200" style="border:1px solid #d3d3d3;" onmousemove="cnvs_mousemove(event)" onclick="cnvs_click(event)">
+Your browser does not support the HTML5 canvas tag.</canvas>
+
+<p>
+<input type="text" id="txtAction">
+<Button id="btnTest">Send To Server server</Button>
+
+Status:<div id="status" style="color:blue;margin-top:20px">Reply from the Server:</div>
+
+Server:<div id="server">server-response</div>
+
+
+<script>
+// set the global variable
+setCanvas( document.getElementById("myCanvas") );
+// load the graphical data from server
+reloadCanvas();
+
+</script>
+
+
+</body>
+</html>
+
+

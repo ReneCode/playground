@@ -30,6 +30,13 @@
 </head>
 <body>
 
+<h3>Your bookmarks</h3>
+<ui>
+    {% for doc in docs %}
+    <li><a href="{{doc.url}}">{{doc['name']}}</a></li>
+    {% endfor %}
+</ul>
+
 <h3>Rene Server TEST</h3>
 
     <form name="f" action="/save" method="post">
