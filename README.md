@@ -1,4 +1,6 @@
-Blog project for M101JS
+playground
+==========
+that my test / playground
 
 ./app.js - entry point
 ./package.json - npm package description
@@ -11,3 +13,5 @@ Getting started
 
 npm install
 node app.js
+=======
+
