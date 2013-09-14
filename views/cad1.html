@@ -11,16 +11,10 @@
 	<script language="javascript" type="text/javascript">
  
     $( document ).ready(function() {
-		$('head').text('ready');
-
-
 		$( '#btnTest').click(function( event ) {
 			var name = "rene";
 			$('status').text('sending ...');
-
-
         });
-     
     });
  
     </script>
@@ -33,11 +27,18 @@
 
 var bFirst = true;
 var oldPos;
+var dragging = false;
+
+var drawingSurfaceImageData = {};
+var mouseDownPos = {};
+var canvas = {};
+var context = {};
 
 //var canvas=document.getElementById("myCanvas");
 
 function setCanvas(c) {
 	canvas = c;
+	context = canvas.getContext("2d");
 }
 
 function setOldPos(p) {
@@ -45,6 +46,7 @@ function setOldPos(p) {
 }
 
 function saveLine(p1, p2) {
+
 	$.post('/action', { action:'addLine', p1:p1, p2:p2}, function(data) {
 		$("#server").text(data);
 	});
@@ -69,18 +71,54 @@ function windowToCanvas(x, y) {
 }
 
 function drawLine(p1, p2) {
-	var ctx = canvas.getContext("2d");
-	ctx.moveTo(p1.x, p1.y);
-	ctx.lineTo(p2.x, p2.y);
-	ctx.stroke();
+//	var ctx = canvas.getContext("2d");
+	context.moveTo(p1.x, p1.y);
+	context.lineTo(p2.x, p2.y);
+	context.stroke();
 }
+
+
+// ----------------------
+
+function saveDrawingSurface() {
+	drawingSurfaceImageData = context.getImageData(0,0,canvas.width, canvas.height)
+}
+
+function restoreDrawingSurface() {
+	context.putImageData(drawingSurfaceImageData, 0, 0);
+}
+// -------------------------------
+
+function drawRubberband(pos) {
+	context.save();
+	context.beginPath();
+	context.moveTo(mouseDownPos.x, mouseDownPos.y);
+	context.lineTo(pos.x, pos.y);
+
+	context.lineWidth = 3;
+	context.strokeStyle = '#ff0000';
+	context.lineCap = 'round';
+	
+	context.stroke();
+
+	context.restore();
+} 
+
+
+// -------------------------------
 
 function cnvs_mousemove(e) {
 	var pos = windowToCanvas(e.clientX, e.clientY);
 	$("#status").text("Pos:" + pos.x + " / " + pos.y);
+	if (dragging) {
+		e.preventDefault();
+		restoreDrawingSurface();
+		drawRubberband(pos);
+	}
 }
-
+/*
 function cnvs_click(e) {
+	e.preventDefault();
 	var pos = windowToCanvas(e.clientX, e.clientY);
 	if (bFirst) {
 		setOldPos(pos);
@@ -91,15 +129,26 @@ function cnvs_click(e) {
 	} 
 	bFirst = !bFirst;
 }
+*/
+function cnvs_mousedown(e) {
+	mouseDownPos = windowToCanvas(e.clientX, e.clientY);
+	e.preventDefault();
+	saveDrawingSurface();
+	dragging = true;
+}
 
+function cnvs_mouseup(e) {
+	var pos = windowToCanvas(e.clientX, e.clientY);
+	restoreDrawingSurface();
+	// save line
+	dragging = false;
+	drawLine(mouseDownPos, pos);
+	saveLine(mouseDownPos, pos);
+}
 </script>
-<h1>CAD1</h1>
+<div id='title'>CAD1</div>
 
-<div id="head">-tmp-</div>
-
-
-
-<canvas id="myCanvas" width="300" height="200" style="border:1px solid #d3d3d3;" onmousemove="cnvs_mousemove(event)" onclick="cnvs_click(event)">
+<canvas id="myCanvas" width="300" height="200" style="border:1px solid #d3d3d3;" onmousemove="cnvs_mousemove(event)" onmousedown="cnvs_mousedown(event)" onmouseup="cnvs_mouseup(event)">
 Your browser does not support the HTML5 canvas tag.</canvas>
 
 <p>
